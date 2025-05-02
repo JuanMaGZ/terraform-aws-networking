@@ -27,6 +27,7 @@ variable "subnet_config" {
     cidr_block = string
     public     = optional(bool, false)
     az         = string
+    map_public_ip_on_launch = optional(bool, false)
   }))
 
   validation {
