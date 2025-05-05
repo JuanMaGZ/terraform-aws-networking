@@ -33,3 +33,18 @@ output "private_subnets" {
   description = "The ID and the availability zone of private subnets."
   value       = local.output_private_subnets
 }
+
+output "elastic_ip_dns" {
+  description = "The DNS of the Elastic IP created for the NAT Gateway."
+  value       = length(aws_eip.this) > 0 ? aws_eip.this[0].public_dns : null
+}
+
+output "elastic_ip" {
+  description = "The Elastic IP created for the NAT Gateway."
+  value       = length(aws_eip.this) > 0 ? aws_eip.this[0].public_ip : null
+}
+
+output "nat_gateway_id" {
+  description = "ID of the NAT Gateway (if created)."
+  value       = length(aws_nat_gateway.this) > 0 ? aws_nat_gateway.this[0].id : null
+}

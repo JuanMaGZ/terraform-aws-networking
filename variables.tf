@@ -3,10 +3,11 @@ variable "vpc_config" {
   description = "Contains the configuration for the VPC. More especially, the CIDR block and the name of the VPC."
 
   type = object({
-    cidr_block = string
-    name       = string
-    enable_dns_support = optional(bool, true)
+    cidr_block           = string
+    name                 = string
+    enable_dns_support   = optional(bool, true)
     enable_dns_hostnames = optional(bool, false)
+    enable_nat_gateway   = optional(bool, false)
   })
 
   validation {
@@ -26,9 +27,9 @@ variable "subnet_config" {
   EOF
 
   type = map(object({
-    cidr_block = string
-    public     = optional(bool, false)
-    az         = string
+    cidr_block              = string
+    public                  = optional(bool, false)
+    az                      = string
     map_public_ip_on_launch = optional(bool, false)
   }))
 
