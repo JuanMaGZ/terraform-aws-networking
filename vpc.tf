@@ -63,6 +63,9 @@ resource "aws_route_table" "public_rtb" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.this[0].id
   }
+  tags = {
+    Name = "public-rtb"
+  }
 }
 
 resource "aws_route_table_association" "public" {
@@ -92,3 +95,26 @@ resource "aws_nat_gateway" "this" {
 
   depends_on = [aws_internet_gateway.this]
 }
+
+resource "aws_route_table" "private_rtb" {
+  count  = var.vpc_config.enable_nat_gateway && length(local.private_subnets) > 0 ? 1 : 0
+  vpc_id = aws_vpc.this.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.this[0].id
+  }
+
+  tags = {
+    Name = "private-rtb"
+  }
+}
+
+resource "aws_route_table_association" "private" {
+  for_each = var.vpc_config.enable_nat_gateway ? local.private_subnets : {}
+
+  subnet_id      = aws_subnet.this[each.key].id
+  route_table_id = aws_route_table.private_rtb[0].id
+}
+
+
