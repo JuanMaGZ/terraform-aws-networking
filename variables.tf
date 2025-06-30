@@ -40,3 +40,9 @@ variable "subnet_config" {
     error_message = "The cidr_block config option must contain a valid CIDR block."
   }
 }
+
+variable "enable_flow_logs" {
+  description = "Whether to enable VPC Flow Logs"
+  type        = bool
+  default     = false
+}
