@@ -8,6 +8,7 @@ variable "vpc_config" {
     enable_dns_support   = optional(bool, true)
     enable_dns_hostnames = optional(bool, false)
     enable_nat_gateway   = optional(bool, false)
+    enable_flow_logs     = optional(bool, false)
   })
 
   validation {
@@ -39,10 +40,4 @@ variable "subnet_config" {
     ])
     error_message = "The cidr_block config option must contain a valid CIDR block."
   }
-}
-
-variable "enable_flow_logs" {
-  description = "Whether to enable VPC Flow Logs"
-  type        = bool
-  default     = false
 }

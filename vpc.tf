@@ -26,13 +26,13 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
-  count = var.enable_flow_logs ? 1 : 0
+  count = var.vpc_config.enable_flow_logs ? 1 : 0
   name  = "/aws/vpc/flow-logs/${aws_vpc.this.id}"
   retention_in_days = 14
 }
 
 resource "aws_iam_role" "flow_log_role" {
-  count = var.enable_flow_logs ? 1 : 0
+  count = var.vpc_config.enable_flow_logs ? 1 : 0
   name  = "vpc-flow-logs-role-${aws_vpc.this.id}"
 
   assume_role_policy = jsonencode({
@@ -48,7 +48,7 @@ resource "aws_iam_role" "flow_log_role" {
 }
 
 resource "aws_iam_role_policy" "flow_log_policy" {
-  count = var.enable_flow_logs ? 1 : 0
+  count = var.vpc_config.enable_flow_logs ? 1 : 0
   name  = "vpc-flow-logs-policy-${aws_vpc.this.id}"
   role  = aws_iam_role.flow_log_role[0].name
 
@@ -66,7 +66,7 @@ resource "aws_iam_role_policy" "flow_log_policy" {
 }
 
 resource "aws_flow_log" "this" {
-  count                = var.enable_flow_logs ? 1 : 0
+  count                = var.vpc_config.enable_flow_logs ? 1 : 0
   log_destination_type = "cloud-watch-logs"
   log_destination      = aws_cloudwatch_log_group.vpc_flow_logs[0].arn
   iam_role_arn         = aws_iam_role.flow_log_role[0].arn
